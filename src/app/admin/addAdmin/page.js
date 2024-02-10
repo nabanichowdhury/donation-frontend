@@ -1,7 +1,158 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { getUser } from "@/lib/utils/getUser";
+import auth from "../../../../firebase.init";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { updateUser } from "@/lib/utils/updateUser";
+import { createUser } from "@/lib/utils/createUser";
 
 const AddAdmin = () => {
-  return <div>add admin page</div>;
+  const router = useRouter();
+
+  const [adminName, setAdminName] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminRole, setAdminRole] = useState("admin");
+  const [adminPassword, setAdminPassword] = useState("");
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+
+  const handleAdminNameChange = (event) => {
+    setAdminName(event.target.value);
+  };
+
+  const handleAdminEmailChange = (event) => {
+    setAdminEmail(event.target.value);
+  };
+
+  const handleAdminRoleChange = (event) => {
+    setAdminRole(event.target.value);
+  };
+
+  const handleAdminPasswordChange = (event) => {
+    setAdminPassword(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const adminData = {
+      name: adminName,
+      email: adminEmail,
+      role: adminRole,
+      password: adminPassword,
+    };
+    const res = await getUser(adminEmail);
+
+    if (res) {
+      const result = await updateUser(res._id, adminData);
+      if (result.success) {
+        setAdminName("");
+        setAdminEmail("");
+
+        setAdminPassword("");
+        toast.success("User is updated to admin successfully");
+      } else {
+        toast.error("Error updating user to admin");
+      }
+    } else {
+      await createUserWithEmailAndPassword(adminEmail, adminPassword);
+      const result = await createUser(adminData);
+      if (result.success) {
+        setAdminName("");
+        setAdminEmail("");
+
+        setAdminPassword("");
+        toast.success("Admin added successfully");
+      } else {
+        toast.error("Error adding admin");
+      }
+    }
+
+    // const adminRes = await createAdmin(adminData);
+
+    // if (adminRes.success) {
+    //   // Resetting form fields after successful submission
+    //   setAdminName("");
+    //   setAdminEmail("");
+    //   setAdminRole("");
+    //   setAdminPassword("");
+
+    //   toast.success("Admin added successfully");
+    //   router.push("/admin/allDonations"); // Redirect to appropriate page
+    // } else {
+    //   toast.error("Error adding admin");
+    // }
+  };
+
+  return (
+    <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <h1 className="text-xl text-center font-bold">Add Admin</h1>
+      <form className="card-body shadow-xl" onSubmit={handleSubmit}>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Name</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Enter admin name"
+            className="input input-bordered"
+            value={adminName}
+            onChange={handleAdminNameChange}
+            required
+          />
+        </div>
+
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Email</span>
+          </label>
+          <input
+            type="email"
+            placeholder="Enter admin email"
+            className="input input-bordered"
+            value={adminEmail}
+            onChange={handleAdminEmailChange}
+            required
+          />
+        </div>
+
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Role</span>
+          </label>
+          <input
+            type="text"
+            disabled
+            className="input input-bordered"
+            value={adminRole}
+            onChange={handleAdminRoleChange}
+            required
+          />
+        </div>
+
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Password</span>
+          </label>
+          <input
+            type="password"
+            placeholder="Enter admin password"
+            className="input input-bordered"
+            value={adminPassword}
+            onChange={handleAdminPasswordChange}
+            required
+          />
+        </div>
+
+        <div className="form-control mt-6">
+          <button type="submit" className="btn btn-primary">
+            Add Admin
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default AddAdmin;

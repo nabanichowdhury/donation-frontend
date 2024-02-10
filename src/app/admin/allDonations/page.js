@@ -64,21 +64,21 @@ const AllDonations = () => {
   }, []);
   const handleDelete = async (id) => {
     const user = await getUser(auth.currentUser.email);
-    console.log(user);
+
     const res = await deleteDonationPost(id, user);
-    console.log(res);
+
     if (res.success) {
       toast("Donation Post Deleted Successfully");
     }
     const data = await getAllDonations();
-    console.log(data);
+
     setDonations(data);
   };
   return (
     <div className="grid grid-cols-2 gap-6 mx-20">
       {donations.map((donation) => {
         return (
-          <div className="card card-side shadow-xl">
+          <div key={donation._id} className="card card-side shadow-xl">
             <div
               className={`${getCardBackground(
                 donation.category

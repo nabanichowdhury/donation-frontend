@@ -56,7 +56,6 @@ const Donate = ({ params }) => {
       <button onClick={handleSubmit} className="btn btn-primary mt-4">
         Donate
       </button>
-      <ToastContainer />
     </div>
   );
 };

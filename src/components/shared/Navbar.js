@@ -67,7 +67,7 @@ const Navbar = () => {
                   <summary>Profile</summary>
                   <ul className="p-2 bg-base-100 rounded-t-none">
                     <li>
-                      <a>My Profile</a>
+                      <Link href={`/myprofile/${user.email}`}>My Profile</Link>
                     </li>
                     <li>
                       <button onClick={handleLogout} className="btn btn-ghost">
