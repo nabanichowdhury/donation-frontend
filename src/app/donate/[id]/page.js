@@ -9,6 +9,7 @@ import { postDonate } from "@/lib/utils/postDonate";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getSingleDonation } from "@/lib/utils/getSingleDonation";
 
 const Donate = ({ params }) => {
   const router = useRouter();
@@ -24,7 +25,9 @@ const Donate = ({ params }) => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const donation = await getSingleDonation(params.id);
     const currUser = await getUser(user.email);
+
     const u = {
       _id: currUser?._id,
       name: currUser?.name,
@@ -33,7 +36,18 @@ const Donate = ({ params }) => {
       password: currUser?.password,
       amount: amount,
     };
-    const donate = await postDonate(params.id, u);
+    const data = {
+      user: u,
+      donation: {
+        _id: donation._id,
+        name: donation.donationType,
+        category: donation.category,
+        amount: amount,
+        description: donation.description,
+        date: new Date(),
+      },
+    };
+    const donate = await postDonate(params.id, data);
     if (donate.success) {
       showToast();
       router.push("/donations");

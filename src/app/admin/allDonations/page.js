@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import auth from "../../../../firebase.init";
 import { deleteDonationPost } from "@/lib/utils/deleteDonationPost";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 function getBadgeColor(category) {
   switch (category) {
@@ -55,6 +56,7 @@ function getTextColor(category) {
 
 const AllDonations = () => {
   const [donations, setDonations] = useState([]);
+  const [deleteDonation, setDeleteDonation] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       const data = await getAllDonations();
@@ -62,11 +64,14 @@ const AllDonations = () => {
     };
     fetchData();
   }, []);
-  const handleDelete = async (id) => {
+  const handleDeleteDonation = (id) => {
+    setDeleteDonation(id);
+  };
+  const handleDelete = async () => {
     const user = await getUser(auth.currentUser.email);
 
-    const res = await deleteDonationPost(id, user);
-
+    const res = await deleteDonationPost(deleteDonation, user);
+    setDeleteDonation("");
     if (res.success) {
       toast("Donation Post Deleted Successfully");
     }
@@ -94,29 +99,42 @@ const AllDonations = () => {
                 <label
                   htmlFor="my_modal_6"
                   className={`btn bg-red-900 text-white`}
+                  onClick={() => handleDeleteDonation(donation._id)}
                 >
                   Delete
                 </label>
-                <button className={`btn bg-amber-500 text-white`}>Edit</button>
-              </div>
-            </div>
-            <input type="checkbox" id="my_modal_6" className="modal-toggle" />
-            <div className="modal" role="dialog">
-              <div className="modal-box">
-                <h3 className="font-bold text-lg">Hello!</h3>
-                <p className="py-4">This modal works with a hidden checkbox!</p>
-                <div className="modal-action">
-                  <label
-                    htmlFor="my_modal_6"
-                    onClick={() => handleDelete(donation._id)}
-                    className="btn bg-red-900 text-white"
-                  >
-                    Yes I want to delete
-                  </label>
-                  <label htmlFor="my_modal_6" className="btn">
-                    No I don't
-                  </label>
+                <input
+                  type="checkbox"
+                  id="my_modal_6"
+                  className="modal-toggle"
+                />
+                <div className="modal" role="dialog">
+                  <div className="modal-box">
+                    <h3 className="font-bold text-lg">
+                      Do you want to Delete {donation.donationType}?
+                    </h3>
+                    <p className="py-4">Click the buttons Accordingly</p>
+                    <div className="modal-action">
+                      <label
+                        htmlFor="my_modal_6"
+                        onClick={handleDelete}
+                        className="btn bg-red-900 text-white"
+                      >
+                        Yes I want to delete
+                      </label>
+                      <label htmlFor="my_modal_6" className="btn">
+                        No I don't
+                      </label>
+                    </div>
+                  </div>
                 </div>
+                <Link
+                  href={`/admin/allDonations/updateDonation/${donation._id}`}
+                >
+                  <button className={`btn bg-amber-500 text-white`}>
+                    Edit
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

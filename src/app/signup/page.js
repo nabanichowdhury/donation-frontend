@@ -32,6 +32,7 @@ const SignUp = () => {
       email: email,
       role: "user",
       password: password,
+      donations: [],
     });
     setName("");
     setEmail("");

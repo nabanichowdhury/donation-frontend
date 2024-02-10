@@ -6,7 +6,6 @@ export const deleteDonationPost = async (id, user) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
-      cache: "no-store",
     });
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);

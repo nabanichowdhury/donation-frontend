@@ -15,6 +15,7 @@ const Navbar = () => {
   const [admin, setAdmin] = useState(false);
 
   const handleLogout = () => {
+    setAdmin(false);
     signOut();
     toast.success("Logged Out Successfully");
     router.push("/");
@@ -57,26 +58,28 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
+
             <li>
               <Link href="/donations">Donations</Link>
             </li>
 
             {user ? (
-              <li>
-                <details>
-                  <summary>Profile</summary>
-                  <ul className="p-2 bg-base-100 rounded-t-none">
-                    <li>
-                      <Link href={`/myprofile/${user.email}`}>My Profile</Link>
-                    </li>
-                    <li>
-                      <button onClick={handleLogout} className="btn btn-ghost">
-                        LogOut
-                      </button>
-                    </li>
-                  </ul>
-                </details>
-              </li>
+              <>
+                <li>
+                  <Link
+                    className="bg-indigo-200"
+                    href={`/myprofile/myDonations`}
+                  >
+                    User Dashboard
+                  </Link>
+                </li>
+
+                <li>
+                  <button onClick={handleLogout} className="btn btn-ghost">
+                    LogOut
+                  </button>
+                </li>
+              </>
             ) : (
               <li>
                 <Link href="/login">Login</Link>
