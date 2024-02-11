@@ -73,6 +73,7 @@ const MyDonations = () => {
     donatedAmount: donation.amount,
     date: donation.date,
   }));
+  if (!userDonations) return <div>No donations found</div>;
 
   return (
     <div>

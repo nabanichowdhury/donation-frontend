@@ -74,7 +74,7 @@ const DonationStatistics = () => {
 
   const dataByDonationType = calculateTotalAmountByDonationType(donations);
   const donationTypeStat = dataByDonationType.map((item) => {
-    const totalValue = dataByDonationType.reduce(
+    const totalValue = dataByDonationType?.reduce(
       (acc, curr) => acc + curr.value,
       0
     );

@@ -13,7 +13,7 @@ function getBadgeColor(category) {
       return "bg-yellow-300";
     case "Education":
       return "bg-purple-300";
-    // Add more cases as needed
+
     default:
       return "badge-secondary"; // Default color
   }
@@ -21,16 +21,16 @@ function getBadgeColor(category) {
 function getCardBackground(category) {
   switch (category) {
     case "Health":
-      return "bg-red-100"; // Change this to the desired background color class
+      return "bg-red-100";
     case "Clothing":
-      return "bg-green-100 "; // Change this to the desired background color class
+      return "bg-green-100 ";
     case "Food":
-      return "bg-yellow-100 "; // Change this to the desired background color class
+      return "bg-yellow-100 ";
     case "Education":
-      return "bg-purple-100 "; // Change this to the desired background color class
-    // Add more cases as needed
+      return "bg-purple-100 ";
+
     default:
-      return "bg-primary"; // Default background color
+      return "bg-primary";
   }
 }
 
@@ -105,7 +105,7 @@ const TotalDonations = () => {
     },
     []
   );
-  const totalAmount = userData?.donations.reduce((accumulator, donation) => {
+  const totalAmount = userData?.donations?.reduce((accumulator, donation) => {
     accumulator += parseInt(donation.amount);
     return accumulator;
   }, 0);
@@ -113,7 +113,7 @@ const TotalDonations = () => {
   return (
     <div>
       <h1 className="text-xl text-center font-bold">
-        You Have total Donated :{totalAmount} dollar
+        You Have total Donated : {totalAmount} dollar
       </h1>
       <div className="grid grid-cols-2 gap-4">
         <div>
