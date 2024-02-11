@@ -16,7 +16,7 @@ const AdminPanel = () => {
       try {
         if (user) {
           const response = await axios.get(
-            `http://localhost:8000/user/${user.email}`
+            `https://donation-server-roan.vercel.app/user/${user.email}`
           );
 
           if (response.data.role != "admin") {
