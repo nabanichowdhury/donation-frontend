@@ -28,113 +28,121 @@ const DonationStatistics = () => {
 
   if (loading) return <div>Loading...</div>;
   const userId = userData?._id;
+  console.log(userId);
 
   const calculateDonationsByCategory = (donations, userId) => {
     const donationsByCategory = {};
     donations.forEach((donation) => {
-      const donatedByUser = donation.donatedUser.find(
-        (user) => user._id === userId
+      const donatedByUser = donation?.donatedUser?.filter(
+        (user) => user._id == userId
       );
+      console.log(donatedByUser);
       if (donatedByUser) {
         const category = donation.category;
-        const amount = parseInt(donatedByUser.amount);
-        if (!donationsByCategory[category]) {
-          donationsByCategory[category] = {
-            category: category,
-            donatedByUser: amount,
-            donatedByOthers: 0,
-          };
-        } else {
-          donationsByCategory[category].donatedByUser += amount;
+        const amount = donatedByUser?.reduce((total, user) => {
+          const userAmount = parseInt(user.amount);
+          return isNaN(userAmount) ? total : total + userAmount;
+        }, 0);
+        if (!isNaN(amount)) {
+          if (!donationsByCategory[category]) {
+            donationsByCategory[category] = {
+              category: category,
+              donatedByUser: amount,
+              donatedByOthers: 0,
+            };
+          } else {
+            donationsByCategory[category].donatedByUser += amount;
+          }
         }
       } else {
         const category = donation.category;
-        const amount = donation.donatedUser.reduce(
-          (total, user) => total + parseInt(user.amount),
-          0
-        );
-        if (!donationsByCategory[category]) {
-          donationsByCategory[category] = {
-            category: category,
-            donatedByUser: 0,
-            donatedByOthers: amount,
-          };
-        } else {
-          donationsByCategory[category].donatedByOthers += amount;
+        const amount = donation?.donatedUser?.reduce((total, user) => {
+          const userAmount = parseInt(user.amount);
+          return isNaN(userAmount) ? total : total + userAmount;
+        }, 0);
+        if (!isNaN(amount)) {
+          if (!donationsByCategory[category]) {
+            donationsByCategory[category] = {
+              category: category,
+              donatedByUser: 0,
+              donatedByOthers: amount,
+            };
+          } else {
+            donationsByCategory[category].donatedByOthers += amount;
+          }
         }
       }
     });
-
-    // Convert the donationsByCategory object into an array of objects
     const result = Object.values(donationsByCategory);
-
     return result;
   };
 
   const donationsByCategory = calculateDonationsByCategory(donations, userId);
   console.log(donationsByCategory);
-  const finalData = donationsByCategory.map((item) => {
-    const totalValue = donationsByCategory.reduce(
-      (acc, curr) => acc + curr.donatedByUser + curr.donatedByOthers,
-      0
-    );
-    const percentage = (item.donatedByUser / totalValue) * 100;
+
+  const finalData = donationsByCategory?.map((item) => {
+    const percentage =
+      (item.donatedByUser / (item.donatedByUser + item.donatedByOthers)) * 100;
     return [
       { name: item.category, value: percentage.toFixed(2) },
       { name: "others", value: (100 - percentage).toFixed(2) },
     ];
   });
-  console.log(finalData);
+  //   console.log(finalData);
   const calculateDonationsByType = (donations, userId) => {
     const donationsByType = {};
     donations.forEach((donation) => {
-      const donatedByUser = donation.donatedUser.find(
-        (user) => user._id === userId
+      const donatedByUser = donation?.donatedUser?.filter(
+        (user) => user._id == userId
       );
+
       if (donatedByUser) {
         const type = donation.donationType;
-        const amount = parseInt(donatedByUser.amount);
-        if (!donationsByType[type]) {
-          donationsByType[type] = {
-            type: type,
-            donatedByUser: amount,
-            donatedByOthers: 0,
-          };
-        } else {
-          donationsByType[type].donatedByUser += amount;
+        const amount = donatedByUser?.reduce((total, user) => {
+          const userAmount = parseInt(user.amount);
+          return isNaN(userAmount) ? total : total + userAmount;
+        }, 0);
+        if (!isNaN(amount)) {
+          if (!donationsByType[type]) {
+            donationsByType[type] = {
+              type: type,
+              donatedByUser: amount,
+              donatedByOthers: 0,
+            };
+          } else {
+            donationsByType[type].donatedByUser += amount;
+          }
         }
       } else {
-        const type = donation.donationType;
-        const amount = donation.donatedUser.reduce(
-          (total, user) => total + parseInt(user.amount),
-          0
-        );
-        if (!donationsByType[type]) {
-          donationsByType[type] = {
-            type: type,
-            donatedByUser: 0,
-            donatedByOthers: amount,
-          };
-        } else {
-          donationsByType[type].donatedByOthers += amount;
+        const type = donation.type;
+        const amount = donation?.donatedUser?.reduce((total, user) => {
+          const userAmount = parseInt(user.amount);
+          return isNaN(userAmount) ? total : total + userAmount;
+        }, 0);
+        if (!isNaN(amount)) {
+          if (!donationsByType[type]) {
+            donationsByType[type] = {
+              type: type,
+              donatedByUser: 0,
+              donatedByOthers: amount,
+            };
+          } else {
+            donationsByType[type].donatedByOthers += amount;
+          }
         }
       }
     });
-
-    // Convert the donationsByCategory object into an array of objects
     const result = Object.values(donationsByType);
-
     return result;
   };
 
   const donationsByType = calculateDonationsByType(donations, userId);
-  console.log(donationsByCategory);
+  console.log(donationsByType);
+
   const finalData1 = donationsByType.map((item) => {
-    const totalValue = donationsByType.reduce(
-      (acc, curr) => acc + curr.donatedByUser + curr.donatedByOthers,
-      0
-    );
-    const percentage = (item.donatedByUser / totalValue) * 100;
+    const percentage =
+      (item.donatedByUser / (item.donatedByOthers + item.donatedByUser)) * 100;
+
     return [
       { name: item.type, value: percentage.toFixed(2) },
       { name: "others", value: (100 - percentage).toFixed(2) },
@@ -143,20 +151,21 @@ const DonationStatistics = () => {
   console.log(finalData1);
   console.log(finalData);
 
-  const totalAmountOfUser = userData?.donations.reduce(
+  const totalAmountOfUser = userData?.donations?.reduce(
     (accumulator, donation) => {
-      accumulator += parseInt(donation.amount);
-      return accumulator;
+      const donationAmount = parseInt(donation.amount);
+      return isNaN(donationAmount) ? accumulator : accumulator + donationAmount;
     },
     0
   );
 
-  const totalAmountDonated = donations.reduce((total, donation) => {
-    const donationAmount = donation.donatedUser.reduce((acc, user) => {
-      return acc + parseInt(user.amount);
+  const totalAmountDonated = donations?.reduce((total, donation) => {
+    const donationAmount = donation?.donatedUser?.reduce((acc, user) => {
+      const userAmount = parseInt(user.amount);
+      return isNaN(userAmount) ? acc : acc + userAmount;
     }, 0);
 
-    return total + donationAmount;
+    return isNaN(donationAmount) ? total : total + donationAmount;
   }, 0);
 
   console.log(totalAmountDonated);

@@ -9,12 +9,11 @@ import { updateUser } from "@/lib/utils/updateUser";
 import { createUser } from "@/lib/utils/createUser";
 
 const AddAdmin = () => {
-  const router = useRouter();
-
   const [adminName, setAdminName] = useState("");
   const [adminEmail, setAdminEmail] = useState("");
   const [adminRole, setAdminRole] = useState("admin");
-  const [adminPassword, setAdminPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("admin");
+
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
@@ -30,10 +29,6 @@ const AddAdmin = () => {
     setAdminRole(event.target.value);
   };
 
-  const handleAdminPasswordChange = (event) => {
-    setAdminPassword(event.target.value);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     const adminData = {
@@ -45,7 +40,12 @@ const AddAdmin = () => {
     const res = await getUser(adminEmail);
 
     if (res) {
-      const result = await updateUser(res._id, adminData);
+      const data = {
+        name: adminName,
+        email: adminEmail,
+        role: adminRole,
+      };
+      const result = await updateUser(res._id, data);
       if (result.success) {
         setAdminName("");
         setAdminEmail("");
@@ -68,21 +68,6 @@ const AddAdmin = () => {
         toast.error("Error adding admin");
       }
     }
-
-    // const adminRes = await createAdmin(adminData);
-
-    // if (adminRes.success) {
-    //   // Resetting form fields after successful submission
-    //   setAdminName("");
-    //   setAdminEmail("");
-    //   setAdminRole("");
-    //   setAdminPassword("");
-
-    //   toast.success("Admin added successfully");
-    //   router.push("/admin/allDonations"); // Redirect to appropriate page
-    // } else {
-    //   toast.error("Error adding admin");
-    // }
   };
 
   return (
@@ -133,14 +118,14 @@ const AddAdmin = () => {
 
         <div className="form-control">
           <label className="label">
-            <span className="label-text">Password</span>
+            <span className="label-text">Default Admin Password</span>
           </label>
           <input
-            type="password"
+            disabled
+            type="text"
             placeholder="Enter admin password"
             className="input input-bordered"
             value={adminPassword}
-            onChange={handleAdminPasswordChange}
             required
           />
         </div>

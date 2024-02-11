@@ -92,9 +92,9 @@ const DonationStatistics = () => {
         Category Wise Donation Percentage{" "}
       </h1>
       <div className="grid grid-cols-3">
-        {newData.map((item) => {
+        {newData.map((item, index) => {
           return (
-            <div className="w-64 shadow-xl mt ">
+            <div key={index} className="w-64 shadow-xl mt ">
               <Doughnut
                 data={{
                   labels: item.map((i) => i.name),
@@ -117,9 +117,9 @@ const DonationStatistics = () => {
         Donation Post Wise Percentage{" "}
       </h1>
       <div className="grid grid-cols-3">
-        {donationTypeStat.map((item) => {
+        {donationTypeStat.map((item, index) => {
           return (
-            <div className="w-64 shadow-xl mt ">
+            <div key={index} className="w-64 shadow-xl mt ">
               <Doughnut
                 data={{
                   labels: item.map((i) => i.name),

@@ -33,7 +33,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (user) {
       toast("User logged in successfully");
-      router.back();
+      router.push("/donations");
     }
   }, [user]);
   if (loading) {
