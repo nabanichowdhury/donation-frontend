@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import auth from "../../../firebase.init";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
@@ -26,23 +26,32 @@ const SignUp = () => {
     useCreateUserWithEmailAndPassword(auth);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await createUserWithEmailAndPassword(email, password);
-    const res = await createUser({
-      name: name,
-      email: email,
-      role: "user",
-      password: password,
-      donations: [],
-    });
-    setName("");
-    setEmail("");
-    setPassword("");
-    console.log(res);
-    if (res.success) {
-      toast.success("User created successfully");
-      router.push("/donations");
-    }
+    const res = await createUserWithEmailAndPassword(email, password);
   };
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (user) {
+        const res = await createUser({
+          name: name,
+          email: email,
+          role: "user",
+          password: password,
+          donations: [],
+        });
+        setName("");
+        setEmail("");
+        setPassword("");
+        console.log(res);
+        if (res.success) {
+          toast.success("User created successfully");
+          router.push("/donations");
+        } else {
+          toast.error("something went wrong Try again Later");
+        }
+      }
+    };
+    fetchUser();
+  }, [user]);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -104,10 +113,10 @@ const SignUp = () => {
                 </a>
               </label>
             </div>
-            {error && <div className="text-red-500">{error}</div>}
+            {error && <div className="text-red-500">{error.message}</div>}
 
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Login</button>
+              <button className="btn btn-primary">SignUp</button>
             </div>
           </form>
         </div>

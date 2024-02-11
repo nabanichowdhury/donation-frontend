@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import auth from "../../../firebase.init";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 
@@ -23,20 +23,22 @@ const LoginPage = () => {
   };
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const res = await signInWithEmailAndPassword(email, password);
     setEmail("");
     setPassword("");
-    if (res.user) {
+  };
+  useEffect(() => {
+    if (user) {
       toast("User logged in successfully");
-
       router.back();
     }
-  };
+  }, [user]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="hero min-h-screen ">

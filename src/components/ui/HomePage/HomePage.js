@@ -1,8 +1,27 @@
 "use client";
 import Image from "next/image";
 import axios from "axios";
-import img from "@/assets/Clothing.png";
+
 import { useEffect, useState } from "react";
+import colthingImg from "@/assets/clothing.jpeg";
+import foodImg from "@/assets/Food.png";
+import healthImg from "@/assets/Health.png";
+import educationImg from "@/assets/Education.png";
+import otherImg from "@/assets/other.jpg";
+function getImage(category) {
+  switch (category) {
+    case "Health" || "health":
+      return healthImg;
+    case "Clothing" || "clothing":
+      return colthingImg;
+    case "Food" || "food":
+      return foodImg;
+    case "Education" || "education":
+      return educationImg;
+    default:
+      return otherImg;
+  }
+}
 function getBadgeColor(category) {
   switch (category) {
     case "Health":
@@ -46,7 +65,7 @@ function getTextColor(category) {
       return "text-purple-900"; // Change this to the desired text color class
     // Add more cases as needed
     default:
-      return "text-primary-content"; // Default text color
+      return "text-primary-content";
   }
 }
 
@@ -80,12 +99,7 @@ const HomePage = () => {
   }, []);
   return (
     <>
-      <div
-        className="hero min-h-96"
-        style={{
-          backgroundImage: "url(https://i.ibb.co/7Ks3SnB/purple.jpg)",
-        }}
-      >
+      <div className="hero min-h-96 bg-gradient-to-r from-violet-200 to-fuchsia-200">
         <div className=" "></div>
         <div className="hero-content text-center">
           <div className="max-w-md">
@@ -101,7 +115,6 @@ const HomePage = () => {
                 onChange={handleFilterChange}
               />
             </div>
-            <button className="btn btn-primary  mt-4">Search</button>
           </div>
         </div>
       </div>
@@ -110,7 +123,12 @@ const HomePage = () => {
           return (
             <div key={donation._id} className="card w-96">
               <figure>
-                <Image src={img} width={500} alt="img" />
+                <Image
+                  src={getImage(donation.category)}
+                  width={500}
+                  height={500}
+                  alt="img"
+                />
               </figure>
               <div
                 className={`${getCardBackground(

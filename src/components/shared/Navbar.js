@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { getUser } from "@/lib/utils/getUser";
 
 const Navbar = () => {
   const router = useRouter();
@@ -24,12 +25,12 @@ const Navbar = () => {
     const fetchData = async () => {
       try {
         if (user) {
-          const response = await axios.get(
-            `http://localhost:8000/user/${user.email}`
-          );
-          console.log(response.data.role);
-          if (response.data.role == "admin") {
-            setAdmin(true);
+          const response = await getUser(user?.email);
+
+          if (response) {
+            if (response?.role == "admin") {
+              setAdmin(true);
+            }
           }
         }
       } catch (error) {
@@ -39,6 +40,7 @@ const Navbar = () => {
 
     fetchData(); // Call the fetch function
   }, [user]);
+
   if (loading || signOutloading) return <div>Loading...</div>;
 
   return (
