@@ -6,17 +6,21 @@ import auth from "../../../../firebase.init";
 import { getAllDonations } from "@/lib/utils/getAllDonations";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useRouter } from "next/navigation";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DonationStatistics = () => {
   const [userData, setUser] = useState();
   const [user, loading, error] = useAuthState(auth);
   const [donations, setDonations] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDonations = async () => {
       const allDonations = await getAllDonations();
-
+      if (!user) {
+        router.push("/login");
+      }
       setDonations(allDonations);
       if (user && !loading) {
         const u = await getUser(user?.email);
@@ -24,132 +28,103 @@ const DonationStatistics = () => {
       }
     };
     fetchDonations();
-  }, [user]);
+  }, [user, loading, router]);
 
   if (loading) return <div>Loading...</div>;
   const userId = userData?._id;
-  console.log(userId);
 
-  const calculateDonationsByCategory = (donations, userId) => {
-    const donationsByCategory = {};
-    donations.forEach((donation) => {
-      const donatedByUser = donation?.donatedUser?.filter(
-        (user) => user._id == userId
-      );
-      console.log(donatedByUser);
-      if (donatedByUser) {
-        const category = donation.category;
-        const amount = donatedByUser?.reduce((total, user) => {
-          const userAmount = parseInt(user.amount);
-          return isNaN(userAmount) ? total : total + userAmount;
-        }, 0);
-        if (!isNaN(amount)) {
-          if (!donationsByCategory[category]) {
-            donationsByCategory[category] = {
-              category: category,
-              donatedByUser: amount,
-              donatedByOthers: 0,
-            };
-          } else {
-            donationsByCategory[category].donatedByUser += amount;
-          }
+  function aggregateDonationsByCategoryForUser(donations, userId) {
+    const aggregatedData = {};
+
+    donations?.forEach((donation) => {
+      const category = donation?.category;
+      const donatedByUser = donation?.donatedUser?.reduce((total, user) => {
+        if (user._id === userId) {
+          return total + parseInt(user.amount);
         }
-      } else {
-        const category = donation.category;
-        const amount = donation?.donatedUser?.reduce((total, user) => {
-          const userAmount = parseInt(user.amount);
-          return isNaN(userAmount) ? total : total + userAmount;
-        }, 0);
-        if (!isNaN(amount)) {
-          if (!donationsByCategory[category]) {
-            donationsByCategory[category] = {
-              category: category,
-              donatedByUser: 0,
-              donatedByOthers: amount,
-            };
-          } else {
-            donationsByCategory[category].donatedByOthers += amount;
-          }
+        return total;
+      }, 0);
+      const donatedByOthers = donation?.donatedUser?.reduce((total, user) => {
+        if (user._id !== userId) {
+          return total + parseInt(user.amount);
         }
+        return total;
+      }, 0);
+      if (!aggregatedData[category]) {
+        aggregatedData[category] = {
+          donatedByUser: 0,
+          donatedByOthers: 0,
+          category: category,
+        };
       }
+      aggregatedData[category].donatedByUser += donatedByUser;
+      aggregatedData[category].donatedByOthers += donatedByOthers;
     });
-    const result = Object.values(donationsByCategory);
-    return result;
-  };
 
-  const donationsByCategory = calculateDonationsByCategory(donations, userId);
-  console.log(donationsByCategory);
+    return Object.values(aggregatedData);
+  }
+  const donationCategoryTotals = aggregateDonationsByCategoryForUser(
+    donations,
+    userId
+  );
 
-  const finalData = donationsByCategory?.map((item) => {
-    const percentage =
-      (item.donatedByUser / (item.donatedByUser + item.donatedByOthers)) * 100;
+  function aggregateDonationsByTypeForUser(donations, userId) {
+    const aggregatedData = {};
+
+    donations?.forEach((donation) => {
+      const donationType = donation?.donationType;
+      const donatedByUser = donation?.donatedUser?.reduce((total, user) => {
+        if (user._id === userId) {
+          return total + parseInt(user.amount);
+        }
+        return total;
+      }, 0);
+      const donatedByOthers = donation?.donatedUser?.reduce((total, user) => {
+        if (user._id !== userId) {
+          return total + parseInt(user.amount);
+        }
+        return total;
+      }, 0);
+      if (!aggregatedData[donationType]) {
+        aggregatedData[donationType] = {
+          donatedByUser: 0,
+          donatedByOthers: 0,
+          donationType: donationType,
+        };
+      }
+      aggregatedData[donationType].donatedByUser += donatedByUser;
+      aggregatedData[donationType].donatedByOthers += donatedByOthers;
+    });
+
+    return Object.values(aggregatedData);
+  }
+  const donationTypeTotals = aggregateDonationsByTypeForUser(donations, userId);
+
+  const finalData = donationCategoryTotals?.map((item) => {
     return [
-      { name: item.category, value: percentage.toFixed(2) },
-      { name: "others", value: (100 - percentage).toFixed(2) },
+      {
+        name: item.category,
+        value: item.donatedByUser,
+      },
+      {
+        name: "Donated by Others",
+        value: item.donatedByOthers,
+      },
     ];
   });
-  //   console.log(finalData);
-  const calculateDonationsByType = (donations, userId) => {
-    const donationsByType = {};
-    donations.forEach((donation) => {
-      const donatedByUser = donation?.donatedUser?.filter(
-        (user) => user._id == userId
-      );
 
-      if (donatedByUser) {
-        const type = donation.donationType;
-        const amount = donatedByUser?.reduce((total, user) => {
-          const userAmount = parseInt(user.amount);
-          return isNaN(userAmount) ? total : total + userAmount;
-        }, 0);
-        if (!isNaN(amount)) {
-          if (!donationsByType[type]) {
-            donationsByType[type] = {
-              type: type,
-              donatedByUser: amount,
-              donatedByOthers: 0,
-            };
-          } else {
-            donationsByType[type].donatedByUser += amount;
-          }
-        }
-      } else {
-        const type = donation.type;
-        const amount = donation?.donatedUser?.reduce((total, user) => {
-          const userAmount = parseInt(user.amount);
-          return isNaN(userAmount) ? total : total + userAmount;
-        }, 0);
-        if (!isNaN(amount)) {
-          if (!donationsByType[type]) {
-            donationsByType[type] = {
-              type: type,
-              donatedByUser: 0,
-              donatedByOthers: amount,
-            };
-          } else {
-            donationsByType[type].donatedByOthers += amount;
-          }
-        }
-      }
-    });
-    const result = Object.values(donationsByType);
-    return result;
-  };
-
-  const donationsByType = calculateDonationsByType(donations, userId);
-  console.log(donationsByType);
-
-  const finalData1 = donationsByType.map((item) => {
-    const percentage =
-      (item.donatedByUser / (item.donatedByOthers + item.donatedByUser)) * 100;
-
+  const finalData1 = donationTypeTotals?.map((item) => {
     return [
-      { name: item.type, value: percentage.toFixed(2) },
-      { name: "others", value: (100 - percentage).toFixed(2) },
+      {
+        name: item.donationType,
+        value: item.donatedByUser,
+      },
+      {
+        name: "Donated by Others",
+        value: item.donatedByOthers,
+      },
     ];
   });
-  console.log(finalData1);
-  console.log(finalData);
 
   const totalAmountOfUser = userData?.donations?.reduce(
     (accumulator, donation) => {
@@ -168,8 +143,6 @@ const DonationStatistics = () => {
     return isNaN(donationAmount) ? total : total + donationAmount;
   }, 0);
 
-  console.log(totalAmountDonated);
-  console.log(totalAmountOfUser);
   const data = {
     labels: ["My Total Donated Amount", "Others Donated Amount"],
     datasets: [
@@ -200,7 +173,7 @@ const DonationStatistics = () => {
           </h1>
           <div>
             <div className="grid grid-cols-2">
-              {finalData.map((item, index) => {
+              {finalData?.map((item, index) => {
                 return (
                   <div key={index} className="w-64 shadow-xl my-7 ">
                     <h1 className="text-md text-center font-bold">
@@ -235,9 +208,9 @@ const DonationStatistics = () => {
           </h1>
           <div>
             <div className="grid grid-cols-2">
-              {finalData1.map((item) => {
+              {finalData1?.map((item, index) => {
                 return (
-                  <div className="w-64 shadow-xl my-7 ">
+                  <div key={index} className="w-64 shadow-xl my-7 ">
                     <h1 className="text-md text-center font-bold">
                       {item[0].name}
                     </h1>

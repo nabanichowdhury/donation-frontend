@@ -37,6 +37,7 @@ const AddDonation = () => {
       donationType: postHeading,
       description: description,
       image: imageLink,
+      donatedUser: [],
     };
     const data = {
       user: user,

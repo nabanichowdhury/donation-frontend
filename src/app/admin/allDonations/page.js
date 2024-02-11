@@ -6,6 +6,8 @@ import auth from "../../../../firebase.init";
 import { deleteDonationPost } from "@/lib/utils/deleteDonationPost";
 import { toast } from "react-toastify";
 import Link from "next/link";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
 
 function getBadgeColor(category) {
   switch (category) {
@@ -55,15 +57,26 @@ function getTextColor(category) {
 }
 
 const AllDonations = () => {
+  const router = useRouter();
   const [donations, setDonations] = useState([]);
   const [deleteDonation, setDeleteDonation] = useState("");
+  const [user, loading, error] = useAuthState(auth);
   useEffect(() => {
     const fetchData = async () => {
+      if (user && !loading) {
+        const u = await getUser(user?.email);
+        if (u?.role !== "admin") {
+          router.push("/");
+        }
+      }
+      if (!user) {
+        router.push("/login");
+      }
       const data = await getAllDonations();
       setDonations(data);
     };
     fetchData();
-  }, []);
+  }, [user, loading, router]);
   const handleDeleteDonation = (id) => {
     setDeleteDonation(id);
   };
@@ -123,7 +136,7 @@ const AllDonations = () => {
                         Yes I want to delete
                       </label>
                       <label htmlFor="my_modal_6" className="btn">
-                        No I don't
+                        No I donot
                       </label>
                     </div>
                   </div>

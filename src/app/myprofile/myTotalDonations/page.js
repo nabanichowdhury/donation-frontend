@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { getUser } from "@/lib/utils/getUser";
+import { useRouter } from "next/navigation";
 function getBadgeColor(category) {
   switch (category) {
     case "Health":
@@ -53,16 +54,20 @@ function getTextColor(category) {
 const TotalDonations = () => {
   const [userData, setUser] = useState();
   const [user, loading, error] = useAuthState(auth);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDonations = async () => {
+      if (!user) {
+        router.push("/login");
+      }
       if (user && !loading) {
         const u = await getUser(user?.email);
         setUser(u);
       }
     };
     fetchDonations();
-  }, [user]);
+  }, [user, loading, router]);
 
   if (loading) return <div>Loading...</div>;
 

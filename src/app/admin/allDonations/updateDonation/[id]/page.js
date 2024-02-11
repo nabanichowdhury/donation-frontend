@@ -17,12 +17,16 @@ const UpdateDonation = ({ params }) => {
   const [imageLink, setImageLink] = useState("");
   const [id, setId] = useState("");
   const [user, setUser] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       const userData = await getUser(auth.currentUser.email);
       setUser(userData);
       if (userData.role !== "admin") {
         router.push("/");
+      }
+      if (!userData) {
+        router.push("/login");
       }
       const data = await getSingleDonation(params.id);
 
@@ -33,7 +37,7 @@ const UpdateDonation = ({ params }) => {
       setId(data._id);
     };
     fetchData();
-  }, [params]);
+  }, [params, router]);
 
   const handlePostHeadingChange = (event) => {
     setPostHeading(event.target.value);

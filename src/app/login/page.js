@@ -35,7 +35,7 @@ const LoginPage = () => {
       toast("User logged in successfully");
       router.push("/donations");
     }
-  }, [user]);
+  }, [user, router]);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -46,9 +46,8 @@ const LoginPage = () => {
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold">Login now!</h1>
           <p className="py-6">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
+            Welcome back! Please enter your username and password to access your
+            account and continue making a positive impact through donations..
           </p>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">

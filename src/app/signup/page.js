@@ -51,7 +51,7 @@ const SignUp = () => {
       }
     };
     fetchUser();
-  }, [user]);
+  }, [user, name, email, password, router]);
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -62,9 +62,8 @@ const SignUp = () => {
         <div className="text-center lg:text-left">
           <h1 className="text-5xl font-bold">SignUp Here</h1>
           <p className="py-6">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
+            Ready to make a difference? Create an account today to start your
+            journey of giving and join our community of changemakers.
           </p>
         </div>
         <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">

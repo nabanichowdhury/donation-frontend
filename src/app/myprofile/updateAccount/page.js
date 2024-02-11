@@ -26,6 +26,9 @@ const UpdateAccount = () => {
   const [updateEmail, updatingEmail, updateEmailError] = useUpdateEmail(auth);
   useEffect(() => {
     const fetchUser = async () => {
+      if (!user) {
+        router.push("/login");
+      }
       if (user && !loading) {
         const u = await getUser(user?.email);
         console.log(u);
@@ -37,7 +40,7 @@ const UpdateAccount = () => {
       }
     };
     fetchUser();
-  }, [user, loading]);
+  }, [user, loading, router]);
   if (loading) return <div>Loading...</div>;
 
   const handleNameChange = (e) => {

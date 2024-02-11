@@ -3,16 +3,30 @@ import { getAllDonations } from "@/lib/utils/getAllDonations";
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../../../../firebase.init";
+import { useRouter } from "next/navigation";
 ChartJS.register(ArcElement, Tooltip, Legend);
 const DonationStatistics = () => {
+  const router = useRouter();
   const [donations, setDonations] = useState([]);
+  const [user, loading, error] = useAuthState(auth);
   useEffect(() => {
     const fetchData = async () => {
+      if (user) {
+        const u = await getUser(user?.email);
+        if (u.role !== "admin") {
+          router.push("/");
+        }
+      } else {
+        router.push("/login");
+      }
+
       const data = await getAllDonations();
       setDonations(data);
     };
     fetchData();
-  }, []);
+  }, [user, router]);
 
   const calculateTotalAmountByCategory = (donations) => {
     const totalAmountByCategory = {};

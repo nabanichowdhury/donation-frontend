@@ -1,19 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/utils/getUser";
 import auth from "../../../../firebase.init";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useAuthState,
+  useCreateUserWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { updateUser } from "@/lib/utils/updateUser";
 import { createUser } from "@/lib/utils/createUser";
 
 const AddAdmin = () => {
+  const router = useRouter();
   const [adminName, setAdminName] = useState("");
   const [adminEmail, setAdminEmail] = useState("");
   const [adminRole, setAdminRole] = useState("admin");
   const [adminPassword, setAdminPassword] = useState("admin");
-
+  const [userData, userLoading] = useAuthState(auth);
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
@@ -28,6 +32,22 @@ const AddAdmin = () => {
   const handleAdminRoleChange = (event) => {
     setAdminRole(event.target.value);
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!userLoading && !userData) {
+        router.push("/login");
+      }
+      if (userData && !userLoading) {
+        const u = await getUser(userData?.email);
+
+        if (u.role !== "admin") {
+          router.push("/");
+        }
+      }
+    };
+    fetchUser();
+  }, [userData, userLoading, router]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -69,6 +89,7 @@ const AddAdmin = () => {
       }
     }
   };
+  if (userLoading) return <div>Loading...</div>;
 
   return (
     <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">

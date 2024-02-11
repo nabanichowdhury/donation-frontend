@@ -5,7 +5,7 @@ import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/utils/getUser";
 
@@ -55,7 +55,7 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">
             {admin && (
               <li>
-                <Link className="bg-warning" href="/admin">
+                <Link className="bg-warning" href="/admin/allDonations">
                   Admin panel
                 </Link>
               </li>
