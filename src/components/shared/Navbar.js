@@ -68,7 +68,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     className="bg-indigo-200"
-                    href={`/myprofile/myDonations`}
+                    href={`/myprofile/myDonationLogs`}
                   >
                     User Dashboard
                   </Link>

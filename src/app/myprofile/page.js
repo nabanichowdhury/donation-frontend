@@ -8,10 +8,10 @@ const MyProfile = () => {
   const [user, error, loading] = useAuthState(auth);
   const router = useRouter();
   if (loading) return <div>Loading...</div>;
-  if (!user) {
+  if (!user && !loading) {
     router.push("/login");
   } else {
-    router.push("/myprofile/myDonations");
+    router.push("/myprofile/myDonationLogs");
   }
   return <div></div>;
 };

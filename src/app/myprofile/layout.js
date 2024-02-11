@@ -23,10 +23,10 @@ const layout = ({ children }) => {
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
           {/* Sidebar content here */}
           <li>
-            <Link href="/myprofile/myDonations">My Donation Logs</Link>
+            <Link href="/myprofile/myDonationLogs">My Donation Logs</Link>
           </li>
           <li>
-            <Link href="/myprofile/myDonations">Total Donation</Link>
+            <Link href="/myprofile/myTotalDonations">Total Donation</Link>
           </li>
           <li>
             <Link href="/myprofile/updateAccount">Update Account</Link>
