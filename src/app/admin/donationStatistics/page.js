@@ -6,6 +6,7 @@ import { Doughnut } from "react-chartjs-2";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../../../firebase.init";
 import { useRouter } from "next/navigation";
+import { getUser } from "@/lib/utils/getUser";
 ChartJS.register(ArcElement, Tooltip, Legend);
 const DonationStatistics = () => {
   const router = useRouter();
@@ -18,8 +19,6 @@ const DonationStatistics = () => {
         if (u.role !== "admin") {
           router.push("/");
         }
-      } else {
-        router.push("/login");
       }
 
       const data = await getAllDonations();
@@ -27,6 +26,9 @@ const DonationStatistics = () => {
     };
     fetchData();
   }, [user, router]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const calculateTotalAmountByCategory = (donations) => {
     const totalAmountByCategory = {};
