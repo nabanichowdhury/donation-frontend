@@ -61,10 +61,13 @@ const Navbar = () => {
               </li>
             )}
 
+            {!user && (<li>
+                <Link href="/help">Need Help</Link>
+            </li>
+            )}
             <li>
               <Link href="/donations">Donations</Link>
             </li>
-
             {user ? (
               <>
                 <li>
