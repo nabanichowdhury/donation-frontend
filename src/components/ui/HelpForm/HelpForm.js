@@ -67,7 +67,7 @@ const HelpForm = () => {
                     <div key={item.name} className="">
                         <h4 className="mb-2">{item.title}</h4>
                         {item.type === "text" && <input {...register(item.name, {required: `${item.title} is required.`})} type={item.type} placeholder={item.title} className="input input-bordered w-full rounded-xl" />}
-                        {item.type === "select" && <select {...register(item.name, {required: `${item.title} is required.`})} className="select select-primary w-full rounded-xl">
+                        {item.type === "select" && <select {...register(item.name, {required: `${item.title} is required.`})} className="select select-bordered w-full rounded-xl">
                             {item.options !== null && item.options.map(category => <option key={category.value} value={category.value} className="py-3 h-11">{category.title}</option>)}
                         </select>}
                         {item.type === "textarea" && <textarea className="textarea textarea-bordered w-full rounded-xl min-h-32 resize-y" placeholder={item.title} />}
