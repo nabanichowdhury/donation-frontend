@@ -58,6 +58,10 @@ const HelpForm = () => {
         handleSubmit,
         getValues,
     } = useForm();
+
+    const handleSubmitForm = (payload) => {
+        console.log(payload);
+    }
     return (
         <>
             <div className="flex flex-col gap-5 w-full max-w-[600px] p-5 md:p-12 rounded-xl md:rounded-5xl bg-white shadow-xl">
@@ -70,10 +74,10 @@ const HelpForm = () => {
                         {item.type === "select" && <select {...register(item.name, {required: `${item.title} is required.`})} className="select select-bordered w-full rounded-xl">
                             {item.options !== null && item.options.map(category => <option key={category.value} value={category.value} className="py-3 h-11">{category.title}</option>)}
                         </select>}
-                        {item.type === "textarea" && <textarea className="textarea textarea-bordered w-full rounded-xl min-h-32 resize-y" placeholder={item.title} />}
+                        {item.type === "textarea" && <textarea  {...register(item.name, {required: `${item.title} is required.`})} className="textarea textarea-bordered w-full rounded-xl min-h-32 resize-y" placeholder={item.title} />}
                     </div>
                 )})}
-                <button className="btn bg-pink-400 text-white hover:bg-green-400 rounded-xl">Submit</button>
+                <button onClick={handleSubmit(handleSubmitForm)} className="btn bg-pink-400 text-white hover:bg-green-400 rounded-xl">Submit</button>
             </div>
         </>
     );
