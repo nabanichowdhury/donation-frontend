@@ -19,6 +19,8 @@ const DonationStatistics = () => {
         if (u.role !== "admin") {
           router.push("/");
         }
+      } else {
+        router.push("/login");
       }
 
       const data = await getAllDonations();

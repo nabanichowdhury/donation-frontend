@@ -1,15 +1,12 @@
 export const deleteDonationPost = async (id, user) => {
   try {
-    const res = await fetch(
-      `https://donation-server-roan.vercel.app/delete-donation/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      }
-    );
+    const res = await fetch(`http://localhost:8000/delete-donation/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }

@@ -45,6 +45,7 @@ const AddAdmin = () => {
           router.push("/");
         }
       }
+      
     };
     fetchUser();
   }, [userData, userLoading, router]);
