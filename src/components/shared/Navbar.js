@@ -53,6 +53,11 @@ const Navbar = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
+            {!user && (
+              <li>
+                <Link href="helpForm">Need Help? Click Here</Link>
+              </li>
+            )}
             {admin && (
               <li>
                 <Link className="bg-warning" href="/admin/allDonations">
