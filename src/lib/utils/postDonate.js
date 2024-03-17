@@ -1,16 +1,13 @@
 export const postDonate = async (id, user) => {
   try {
-    const res = await fetch(
-      `https://donation-server-roan.vercel.app/donate/${id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`http://localhost:8000/donate/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+      cache: "no-store",
+    });
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }

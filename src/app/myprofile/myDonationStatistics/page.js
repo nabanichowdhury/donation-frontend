@@ -165,7 +165,7 @@ const DonationStatistics = () => {
         <Doughnut data={data} />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 grid-cols-1-md gap-4">
         <div>
           <h1 className="text-xl text-center font-bold">
             {" "}

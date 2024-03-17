@@ -33,38 +33,38 @@ function getBadgeColor(category) {
       return "bg-purple-300";
     // Add more cases as needed
     default:
-      return "badge-secondary"; // Default color
+      return "badge-secondary-300";
   }
 }
 function getCardBackground(category) {
   switch (category) {
     case "Health" || "health":
-      return "bg-red-100"; // Change this to the desired background color class
+      return "bg-red-100";
     case "Clothing" || "clothing":
-      return "bg-green-100 "; // Change this to the desired background color class
+      return "bg-green-100 ";
     case "Food" || "food":
-      return "bg-yellow-100 "; // Change this to the desired background color class
+      return "bg-yellow-100 ";
     case "Education" || "education":
-      return "bg-purple-100 "; // Change this to the desired background color class
-    // Add more cases as needed
+      return "bg-purple-100 ";
+
     default:
-      return "bg-primary"; // Default background color
+      return "bg-primary-300";
   }
 }
 
 function getTextColor(category) {
   switch (category) {
     case "Health" || "health":
-      return "text-red-900"; // Change this to the desired text color class
+      return "text-red-900";
     case "Clothing" || "clothing":
-      return "text-green-900"; // Change this to the desired text color class
+      return "text-green-900";
     case "Food" || "food":
-      return "text-yellow-900"; // Change this to the desired text color class
+      return "text-yellow-900";
     case "Education" || "education":
-      return "text-purple-900"; // Change this to the desired text color class
-    // Add more cases as needed
+      return "text-purple-900";
+
     default:
-      return "text-primary-content"; // Default text color
+      return "text-primary-content";
   }
 }
 
@@ -74,9 +74,7 @@ const Donations = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://donation-server-roan.vercel.app/donations"
-        );
+        const response = await axios.get("http://localhost:8000/donations");
         setDonations(response.data);
       } catch (error) {
         console.error("Error fetching donations:", error);
@@ -87,7 +85,7 @@ const Donations = () => {
   }, []);
   return (
     <>
-      <div className="grid grid-cols-3 gap-4 mx-20 my-20 ">
+      <div className="grid sm:grid-cols-1  md:grid-cols-1 xl:grid-cols-3 gap-4 mx-4 sm:mx-20 my-4 sm:my-20">
         {donations.map((donation) => {
           return (
             <div key={donation._id} className="card w-96">

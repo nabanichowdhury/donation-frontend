@@ -53,7 +53,12 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex-none">
-          <ul className="menu menu-horizontal gap-3 px-1">
+          <ul className="menu menu-horizontal px-1">
+            {!user && (
+              <li>
+                <Link href="helpForm">Need Help? Click Here</Link>
+              </li>
+            )}
             {admin && (
                 <>
 

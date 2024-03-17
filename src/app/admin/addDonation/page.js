@@ -1,10 +1,11 @@
 "use client";
 import { getUser } from "@/lib/utils/getUser";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import auth from "../../../../firebase.init";
 import { createDonationPost } from "@/lib/utils/createDonationPost";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const AddDonation = () => {
   const router = useRouter();
@@ -12,6 +13,20 @@ const AddDonation = () => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [imageLink, setImageLink] = useState("");
+  const [user, loading, error] = useAuthState(auth);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        const u = await getUser(user?.email);
+        if (u.role !== "admin") {
+          router.push("/");
+        }
+      } else {
+        router.push("/login");
+      }
+    };
+    fetchData();
+  }, [user, router]);
 
   const handlePostHeadingChange = (event) => {
     setPostHeading(event.target.value);

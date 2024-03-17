@@ -88,9 +88,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://donation-server-roan.vercel.app/donations"
-        );
+        const response = await axios.get("http://localhost:8000/donations");
         setDonations(response.data);
       } catch (error) {
         console.error("Error fetching donations:", error);
@@ -101,7 +99,7 @@ const HomePage = () => {
   }, []);
   return (
     <>
-      <div className="hero min-h-96 bg-gradient-to-r from-violet-200 to-fuchsia-200">
+      <div className="hero min-h-96  bg-gradient-to-r from-violet-200 to-fuchsia-200">
         <div className=" "></div>
         <div className="hero-content text-center">
           <div className="max-w-md">
@@ -120,7 +118,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4 mx-20 my-20 ">
+      <div className="grid md:grid-cols-3 sm:grid-clos-1 gap-4 xl:mx-20 md:my-20 ">
         {filteredDonations.map((donation) => {
           return (
             <div key={donation._id} className="card w-96">
