@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useRouter } from "next/navigation";
 import { getUser } from "@/lib/utils/getUser";
+import NotificationDropdown from "../ui/Notification/NotificationDropdown";
 
 const Navbar = () => {
   const router = useRouter();
@@ -52,19 +53,26 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex-none">
-          <ul className="menu menu-horizontal px-1">
+          <ul className="menu menu-horizontal gap-3 px-1">
             {admin && (
+                <>
+
               <li>
                 <Link className="bg-warning" href="/admin/allDonations">
                   Admin panel
                 </Link>
               </li>
+              <NotificationDropdown />
+                </>
             )}
 
-            <li>
-              <Link href="/donations">Donations</Link>
+            {!user && (<li>
+                <Link href="/help">Need Help</Link>
             </li>
-
+            )}
+            <li>
+              <Link className="bg-green-300" href="/donations">Donations</Link>
+            </li>
             {user ? (
               <>
                 <li>
