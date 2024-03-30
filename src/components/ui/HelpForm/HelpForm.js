@@ -3,6 +3,7 @@
 import { createRequest } from "@/lib/utils/createRequest";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import emailjs from "@emailjs/browser";
 
 const input = "input input-bordered w-full rounded-xl";
 
@@ -60,16 +61,46 @@ const helpInputs = [
 ];
 
 const HelpForm = () => {
-  const { register, handleSubmit, getValues } = useForm();
+  const { register, handleSubmit, getValues, reset } = useForm();
 
   const handleSubmitForm = async (payload) => {
     payload.hasRead = false;
     const res = await createRequest(payload);
-    if (res) {
+
+    if (res.success) {
       toast.success("Request created successfully");
+      const serviceId = "service_60fiu6i";
+      const templateId = "template_kymh59t";
+      const publicKeys = "SXleEXDE2HQx-0EzG";
+      const email = res.email;
+      const subject = `Your request for category ${payload.category} has been created`;
+
+      emailjs
+        .send(
+          serviceId,
+          templateId,
+          {
+            subject: subject,
+            to_email: payload.email,
+          },
+          publicKeys
+        )
+        .then(
+          function (response) {
+            console.log("SUCCESS!", response.status, response.text);
+          },
+          function (error) {
+            console.log("FAILED...", error);
+          }
+        );
     } else {
       toast.error("Failed to create request");
     }
+    reset({
+      subject: "",
+      email: "",
+      description: "",
+    });
   };
   return (
     <>

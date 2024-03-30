@@ -37,7 +37,7 @@ const AdminLayout = ({ children }) => {
             <Link href="/admin/addAdmin">Add an Admin</Link>
           </li>
           <li>
-            <Link href="/admin/allRequests">Domation Requests</Link>
+            <Link href="/admin/allRequests">Donation Requests</Link>
           </li>
         </ul>
       </div>

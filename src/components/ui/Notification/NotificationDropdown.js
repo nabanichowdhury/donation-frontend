@@ -48,7 +48,7 @@ const NotificationDropdown = () => {
 
   const getNotificationsFun = async () => {
     const res = await getRequest();
-    console.log(res);
+    // console.log(res);
     if (res) {
       setNotificationsData(res);
     }
@@ -161,8 +161,8 @@ const NotificationDropdown = () => {
 
         <ul className="flex h-auto flex-col overflow-y-auto">
           {notificationsData?.length > 0 ? (
-            notificationsData?.map((item) => (
-              <li key={item.id}>
+            notificationsData?.map((item, index) => (
+              <li key={index}>
                 <Link
                   className={`${
                     !item?.hasRead ? "bg-gray-200" : ""

@@ -72,9 +72,9 @@ const AddDonation = () => {
   };
 
   return (
-    <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+    <div className="card shrink-0 w-full max-w-sm container mx-auto ">
       <h1 className="text-xl text-center font-bold">Add Donation</h1>
-      <form className="card-body shadow-xl" onSubmit={handleSubmit}>
+      <form className="card-body " onSubmit={handleSubmit}>
         <div className="form-control">
           <label className="label">
             <span className="label-text">Donation Post Heading</span>
