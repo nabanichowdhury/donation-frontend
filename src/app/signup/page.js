@@ -41,7 +41,7 @@ const SignUp = () => {
         setName("");
         setEmail("");
         setPassword("");
-        console.log(res);
+
         if (res.success) {
           toast.success("User created successfully");
           router.push("/donations");

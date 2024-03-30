@@ -4,13 +4,6 @@ import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-// import { Link } from "react-router-dom";
-// import { toast } from "react-toastify";
-// import {
-//     getNotifications,
-//     readAllNotification,
-//     readNotification,
-// } from "../../api/notification";
 
 const NotificationDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -48,7 +41,7 @@ const NotificationDropdown = () => {
 
   const getNotificationsFun = async () => {
     const res = await getRequest();
-    // console.log(res);
+
     if (res) {
       setNotificationsData(res);
     }
@@ -60,7 +53,7 @@ const NotificationDropdown = () => {
         getNotificationsFun();
       }, 10000);
     }
-  }, []);
+  }, [token]);
 
   function formatDate(timestamp) {
     // Convert timestamp to Date object

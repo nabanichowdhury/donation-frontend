@@ -4,7 +4,7 @@ import { deleteRequest } from "@/lib/utils/deleteRequest";
 import { getRequest } from "@/lib/utils/getRequest";
 import { getUser } from "@/lib/utils/getUser";
 import { updateRequest } from "@/lib/utils/updateRequest";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import auth from "../../../../firebase.init";
 import { useRouter } from "next/navigation";
@@ -56,7 +56,7 @@ function getTextColor(category) {
   }
 }
 
-const allRequest = () => {
+const AllRequest = () => {
   const router = useRouter();
   const [postHeading, setPostHeading] = useState("");
   const [category, setCategory] = useState("");
@@ -96,7 +96,7 @@ const allRequest = () => {
         getNotificationsFun();
       }, 500000);
     }
-  }, []);
+  }, [token]);
 
   const handleDelete = async (item) => {
     const res = await deleteRequest(item._id);
@@ -336,4 +336,4 @@ const allRequest = () => {
   );
 };
 
-export default allRequest;
+export default AllRequest;
