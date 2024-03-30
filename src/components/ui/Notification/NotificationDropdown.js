@@ -1,4 +1,5 @@
-'use client'
+"use client";
+import { getRequest } from "@/lib/utils/getRequest";
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -13,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 
 const NotificationDropdown = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = localStorage.getItem("token");
   const [notifying, setNotifying] = useState(true);
   const [notificationsData, setNotificationsData] = useState([]);
 
@@ -45,17 +46,18 @@ const NotificationDropdown = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
-//   const getNotificationsFun = async () => {
-//     const res = await getNotifications();
-//     if (res) {
-//       setNotificationsData(res?.results);
-//     }
-//   };
+  const getNotificationsFun = async () => {
+    const res = await getRequest();
+    console.log(res);
+    if (res) {
+      setNotificationsData(res);
+    }
+  };
 
   useEffect(() => {
     if (token) {
       setInterval(() => {
-        // getNotificationsFun();
+        getNotificationsFun();
       }, 10000);
     }
   }, []);
@@ -91,19 +93,19 @@ const NotificationDropdown = () => {
     return formattedDate;
   }
 
-//   const markAsRead = async (id) => {
-//     const res = await readNotification({ id: id, is_read: true });
-//     if (res) {
-//       toast(res.detail, { type: "success" });
-//     }
-//   };
+  //   const markAsRead = async (id) => {
+  //     const res = await readNotification({ id: id, is_read: true });
+  //     if (res) {
+  //       toast(res.detail, { type: "success" });
+  //     }
+  //   };
 
-//   const markAllAsRead = async () => {
-//     const res = await readAllNotification();
-//     if (res) {
-//       toast(res.detail, { type: "success" });
-//     }
-//   };
+  //   const markAllAsRead = async () => {
+  //     const res = await readAllNotification();
+  //     if (res) {
+  //       toast(res.detail, { type: "success" });
+  //     }
+  //   };
 
   return (
     <li className="relative">
@@ -158,20 +160,20 @@ const NotificationDropdown = () => {
         </div>
 
         <ul className="flex h-auto flex-col overflow-y-auto">
-          {notificationsData?.data?.length > 0 ? (
-            notificationsData?.data?.map((item) => (
+          {notificationsData?.length > 0 ? (
+            notificationsData?.map((item) => (
               <li key={item.id}>
                 <Link
                   className={`${
-                    !item?.is_read ? "bg-gray-200" : ""
+                    !item?.hasRead ? "bg-gray-200" : ""
                   } flex flex-col gap-3 border-t border-stroke px-4 py-3 hover:bg-gray-100 dark:border-strokedark dark:hover:bg-meta-4`}
-                  to="#"
+                  href="/"
                 >
                   <p className="text-sm" onClick={() => markAsRead(item?.id)}>
-                    <span className="text-black">{item?.message}</span>{" "}a
+                    <span className="text-black">{item?.category}</span> a
                   </p>
 
-                  <p className="text-xs">{formatDate(item?.created_on)}f</p>
+                  {/* <p className="text-xs">{formatDate(item?.category)}f</p> */}
                 </Link>
               </li>
             ))

@@ -54,29 +54,26 @@ const Navbar = () => {
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
+            {admin && (
+              <>
+                <li>
+                  <Link className="bg-warning" href="/admin/allDonations">
+                    Admin panel
+                  </Link>
+                </li>
+                <NotificationDropdown />
+              </>
+            )}
+
             {!user && (
               <li>
-                <Link href="helpForm">Need Help? Click Here</Link>
-              </li>
-            )}
-            {admin && (
-                <>
-
-              <li>
-                <Link className="bg-warning" href="/admin/allDonations">
-                  Admin panel
-                </Link>
-              </li>
-              <NotificationDropdown />
-                </>
-            )}
-
-            {!user && (<li>
                 <Link href="/help">Need Help</Link>
-            </li>
+              </li>
             )}
             <li>
-              <Link className="bg-green-300" href="/donations">Donations</Link>
+              <Link className="bg-green-300" href="/donations">
+                Donations
+              </Link>
             </li>
             {user ? (
               <>
