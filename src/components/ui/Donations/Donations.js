@@ -74,7 +74,9 @@ const Donations = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/donations");
+        const response = await axios.get(
+          "https://donation-server-roan.vercel.app/donations"
+        );
         setDonations(response.data);
       } catch (error) {
         console.error("Error fetching donations:", error);

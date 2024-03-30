@@ -1,12 +1,15 @@
 export const createRequest = async (request) => {
   try {
-    const res = await fetch("http://localhost:8000/create-request", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
+    const res = await fetch(
+      "https://donation-server-roan.vercel.app/create-request",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request),
+      }
+    );
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }

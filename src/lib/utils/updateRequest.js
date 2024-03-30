@@ -1,13 +1,16 @@
 export const updateRequest = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8000/update-request/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const res = await fetch(
+      `https://donation-server-roan.vercel.app/update-request/${id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
 
-      cache: "no-store",
-    });
+        cache: "no-store",
+      }
+    );
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }

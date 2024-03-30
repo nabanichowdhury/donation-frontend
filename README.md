@@ -10,4 +10,4 @@
 
 #### Backend Github link : [https://github.com/nabanichowdhury/donation-server-side]
 
-#### Backend Server : [http://localhost:8000/]
+#### Backend Server : [https://donation-server-roan.vercel.app/]

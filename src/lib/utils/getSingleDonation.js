@@ -1,9 +1,12 @@
 export const getSingleDonation = async (id) => {
   try {
     console.log("id:", id);
-    const res = await fetch(`http://localhost:8000/donation/${id}`, {
-      cache: "no-store",
-    });
+    const res = await fetch(
+      `https://donation-server-roan.vercel.app/donation/${id}`,
+      {
+        cache: "no-store",
+      }
+    );
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }
