@@ -33,6 +33,16 @@ An admin can add other admins, create donation posts, approve or deny donation r
 
 #### Backend Server: [https://donation-server-roan.vercel.app/]
 
+
+## Admin Access
+
+To access the admin role:
+
+email: admin@admin.com
+password: welcome
+
+
+
 ## How to Run
 
 1. Clone the project repository.
